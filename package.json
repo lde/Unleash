@@ -1,0 +1,25 @@
+{
+  "name": "unleash",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ouicar/unleash.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ouicar/unleash/issues"
+  },
+  "homepage": "https://github.com/ouicar/unleash#readme",
+  "dependencies": {
+    "@passport-next/passport": "^3.1.0",
+    "@passport-next/passport-google-oauth2": "^1.0.0",
+    "unleash-server": "^3.3.0"
+  }
+}
