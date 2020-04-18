@@ -1,14 +1,17 @@
 'use strict';
 
 const unleash = require('unleash-server');
+
+var pgtools = require("pgtools");
 const passport = require('@passport-next/passport');
 const GoogleOAuth2Strategy = require('@passport-next/passport-google-oauth2');
 
-const GOOGLE_CLIENT_ID = process.env.CLIENT_ID||'...';
-const GOOGLE_CLIENT_SECRET = process.env.CLIENT_SECRET||'...';
-const GOOGLE_CALLBACK_URL = process.env.CALLBACK_URL.concat('/api/auth/callback')||'http://localhost:3000/api/auth/callback';
-const DATABASE_URL = process.env.DATABASE_URL||'postgres://unleash_user:password@localhost:5432/unleash'
-const SHARED_SECRET= process.env.UNLEASH_SECRET||'SecureP@ssphr@se'
+const GOOGLE_CLIENT_ID = process.env.CLIENT_ID || '...';
+const GOOGLE_CLIENT_SECRET = process.env.CLIENT_SECRET || '...';
+const GOOGLE_CALLBACK_URL = (process.env.CALLBACK_URL||'http://localhost:3000').concat('/api/auth/callback');
+const DATABASE_URL = process.env.DATABASE_URL || 'postgres://unleash_user:password@localhost:5432/unleash'
+const SHARED_SECRET = process.env.UNLEASH_SECRET || 'SecureP@ssphr@se'
+
 
 passport.use(
     new GoogleOAuth2Strategy(
@@ -48,7 +51,7 @@ function googleAdminAuth(app) {
             res.redirect('/');
         },
     );
-    app.use('/api/client',(req, res, next) => {
+    app.use('/api/client', (req, res, next) => {
         if (req.header('authorization') !== SHARED_SECRET) {
             res.sendStatus(401);
         } else {
@@ -78,11 +81,17 @@ const options = {
     adminAuthentication: 'custom',
     preRouterHook: googleAdminAuth,
     databaseUrl: DATABASE_URL,
-    port: process.env.PORT||3000,
+    port: process.env.PORT || 3000,
 };
 
-unleash.start(options).then(instance => {
-    console.log(
-        `Unleash started on http://localhost:${instance.app.get('port')}`,
-    );
+
+pgtools.createdb(DATABASE_URL, DATABASE_URL.split('/').slice(-1)[0], function (err, res) {
+    console.log(res);
+    unleash.start(options).then(instance => {
+        console.log(
+            `Unleash started on port:${instance.app.get('port')}`,
+        );
+    });
 });
+
+

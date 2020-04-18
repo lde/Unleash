@@ -6,7 +6,7 @@
 
 This repository provides a ready to deploy image of [unleash](https://unleash.github.io/) app
 
-Admin api is secured by google authentification
+Admin api is secured by google authentication
 
 Client api is secure by Authorization header
 
